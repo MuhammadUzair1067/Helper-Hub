@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "stripes",
+  "info": {
+    "name": "Stripe"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "cleaner": {
+      "model": "cleaner",
+      "via": "stripe"
+    },
+    "customerID": {
+      "type": "string"
+    },
+    "subscriptionStatus": {
+      "type": "enumeration",
+      "enum": [
+        "trial",
+        "non",
+        "subscribed",
+        "canceled"
+      ]
+    },
+    "subscriptionID": {
+      "type": "string"
+    }
+  }
+}

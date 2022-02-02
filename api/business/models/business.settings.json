@@ -1,0 +1,38 @@
+{
+  "kind": "collectionType",
+  "collectionName": "businesses",
+  "info": {
+    "name": "business",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "logo": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    },
+    "admin": {
+      "via": "business",
+      "model": "cleaner"
+    },
+    "cleaners": {
+      "collection": "cleaner"
+    },
+    "zipcode": {
+      "type": "biginteger"
+    }
+  }
+}

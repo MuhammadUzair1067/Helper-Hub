@@ -1,0 +1,68 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/cleaners",
+      "handler": "cleaner.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cleaners/count",
+      "handler": "cleaner.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cleaners/:id",
+      "handler": "cleaner.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cleaners",
+      "handler": "cleaner.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/cleaners/trialsubscribe",
+      "handler": "cleaner.trialsubscribe",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cleaners/cancelsubscription",
+      "handler": "cleaner.cancelsubscription",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/cleaners/:id",
+      "handler": "cleaner.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/cleaners/:id",
+      "handler": "cleaner.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

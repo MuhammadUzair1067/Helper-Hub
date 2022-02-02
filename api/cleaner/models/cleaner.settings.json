@@ -1,0 +1,50 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cleaners",
+  "info": {
+    "name": "cleaner",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "biginteger"
+    },
+    "pic": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    },
+    "business": {
+      "via": "admin",
+      "model": "business"
+    },
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "cleaner"
+    },
+    "stripe": {
+      "via": "cleaner",
+      "model": "stripe"
+    }
+  }
+}

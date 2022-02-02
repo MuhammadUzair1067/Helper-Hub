@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bookings",
+  "info": {
+    "name": "booking"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "datetime": {
+      "type": "datetime"
+    },
+    "duration": {
+      "type": "integer"
+    },
+    "customer": {
+      "model": "customer"
+    }
+  }
+}
