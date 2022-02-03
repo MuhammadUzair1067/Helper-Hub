@@ -25,6 +25,14 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/bookings/payStripe/:id",
+      "handler": "booking.payStripe",
+      "config": {
+        "policies": []
+      }
+    },
+    {
       "method": "POST",
       "path": "/bookings",
       "handler": "booking.create",

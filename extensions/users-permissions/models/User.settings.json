@@ -62,6 +62,10 @@
     "cleaner": {
       "via": "user",
       "model": "cleaner"
+    },
+    "customer": {
+      "via": "user",
+      "model": "customer"
     }
   }
 }

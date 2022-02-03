@@ -65,9 +65,22 @@ module.exports = {
       return error;
     }
   },
+  async find(ctx){
+    const {email} = ctx.state.user;
+    try {
+      let user = await axios.get(`${process.env.PUBLIC_URL}users`,
+      {email},
+      {headers: ctx.headers});
+
+      return user.data;
+    } catch (error) {
+      return error;
+    }
+  },
   async subscribe(ctx){
     console.log('he')
-    const {email, payment_method} = ctx.request.body;
+    const  {email} = ctx.state.user;
+    const { payment_method} = ctx.request.body;
     try {
       const customer = await stripe.customers.create({
         payment_method: payment_method,
@@ -93,7 +106,8 @@ module.exports = {
   },
   async trialsubscribe(ctx){
     console.log('he')
-    const {email, payment_method} = ctx.request.body;
+    const  {email} = ctx.state.user;
+    const {payment_method} = ctx.request.body;
     try {
       const customer = await stripe.customers.create({
         payment_method: payment_method,

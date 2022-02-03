@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "schedules",
+  "info": {
+    "name": "schedule",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "available": {
+      "type": "boolean"
+    },
+    "startTime": {
+      "type": "time"
+    },
+    "endTime": {
+      "type": "time"
+    },
+    "days": {
+      "type": "json"
+    },
+    "cleaner": {
+      "via": "schedule",
+      "model": "cleaner"
+    }
+  }
+}

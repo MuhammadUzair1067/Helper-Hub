@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "notifications",
+  "info": {
+    "name": "notification"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "body": {
+      "type": "string"
+    },
+    "business": {
+      "model": "business",
+      "via": "notifications"
+    },
+    "customer": {
+      "via": "notifications",
+      "model": "customer"
+    }
+  }
+}

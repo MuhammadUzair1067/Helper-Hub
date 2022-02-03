@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "bookings",
   "info": {
-    "name": "booking"
+    "name": "booking",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -19,6 +20,40 @@
     },
     "customer": {
       "model": "customer"
+    },
+    "cleaner": {
+      "via": "bookings",
+      "model": "cleaner"
+    },
+    "bedroomCount": {
+      "type": "integer"
+    },
+    "bathroomCount": {
+      "type": "integer"
+    },
+    "pictures": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    },
+    "instructions": {
+      "type": "string"
+    },
+    "pets": {
+      "type": "boolean"
+    },
+    "address": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "integer"
     }
   }
 }

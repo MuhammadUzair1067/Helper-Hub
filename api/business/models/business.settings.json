@@ -33,6 +33,10 @@
     },
     "zipcode": {
       "type": "biginteger"
+    },
+    "notifications": {
+      "via": "business",
+      "collection": "notification"
     }
   }
 }

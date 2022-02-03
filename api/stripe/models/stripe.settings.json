@@ -12,8 +12,8 @@
   "pluginOptions": {},
   "attributes": {
     "cleaner": {
-      "model": "cleaner",
-      "via": "stripe"
+      "via": "stripe",
+      "model": "cleaner"
     },
     "customerID": {
       "type": "string"

@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "customers",
   "info": {
-    "name": "customer"
+    "name": "customer",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -11,9 +12,17 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "users_permissions_user": {
+    "user": {
       "plugin": "users-permissions",
-      "model": "user"
+      "model": "user",
+      "via": "customer"
+    },
+    "notifications": {
+      "via": "customer",
+      "collection": "notification"
+    },
+    "phoneNumber": {
+      "type": "string"
     }
   }
 }
