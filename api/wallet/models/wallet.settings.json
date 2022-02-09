@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wallets",
+  "info": {
+    "name": "wallet",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "connectAccountID": {
+      "type": "string"
+    },
+    "onboarding": {
+      "type": "boolean",
+      "default": false
+    },
+    "cleaner": {
+      "model": "cleaner"
+    }
+  }
+}

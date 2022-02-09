@@ -18,6 +18,7 @@ module.exports = {
         username:email,
         password
       });
+
       if(user.data){
         let cleaner = await strapi.services.cleaner.create({
           firstName,
@@ -139,5 +140,6 @@ module.exports = {
     } catch (error) {
       
     }
-  }
+  },
+
 };

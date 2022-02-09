@@ -12,9 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "datetime": {
-      "type": "datetime"
-    },
     "duration": {
       "type": "integer"
     },
@@ -26,10 +23,12 @@
       "model": "cleaner"
     },
     "bedroomCount": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0
     },
     "bathroomCount": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0
     },
     "pictures": {
       "collection": "file",
@@ -53,7 +52,20 @@
       "type": "string"
     },
     "amount": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0
+    },
+    "date": {
+      "type": "date"
+    },
+    "time": {
+      "type": "time"
+    },
+    "paidBy": {
+      "type": "string"
+    },
+    "paid": {
+      "type": "boolean"
     }
   }
 }

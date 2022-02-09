@@ -9,20 +9,27 @@ const  axios = require('axios');
 module.exports = {
   async create(ctx){
     let entity;
+    const {id} = ctx.state.user;
     const {bathroomDuration, kitchenDuration,bedroomDuration,livingroomDuration,ratePerHour} = ctx.request.body;
     try {
-      let user = await axios.get(`${process.env.PUBLIC_URL}users`,
-      {headers:{"Authorization":ctx.headers.authorization}});
+      // let user = await axios.get(`${process.env.PUBLIC_URL}users`,
+      // {headers:{"Authorization":ctx.headers.authorization}});
 
-      entity = await strapi.services.service.create({
-        bathroomDuration, 
-        kitchenDuration,
-        bedroomDuration,
-        livingroomDuration,
-        ratePerHour,
-        cleaner:user.data[0].cleaner.id
-      })
-      return sanitizeEntity(entity, { model: strapi.models.service });
+      const cleaner = await strapi.services.cleaner.findOne({user:id});
+      if(cleaner){
+        entity = await strapi.services.service.create({
+          bathroomDuration, 
+          kitchenDuration,
+          bedroomDuration,
+          livingroomDuration,
+          ratePerHour,
+          cleaner: cleaner.id
+        })
+        return sanitizeEntity(entity, { model: strapi.models.service });
+      }else{
+        return;
+      }
+
     } catch (error) {
       return error;
     }

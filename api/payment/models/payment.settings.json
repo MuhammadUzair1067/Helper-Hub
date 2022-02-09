@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "payments",
+  "info": {
+    "name": "payment"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "intentID": {
+      "type": "string"
+    },
+    "booking": {
+      "model": "booking"
+    },
+    "status": {
+      "type": "string"
+    }
+  }
+}

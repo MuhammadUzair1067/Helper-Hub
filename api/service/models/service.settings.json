@@ -25,7 +25,8 @@
       "type": "integer"
     },
     "ratePerHour": {
-      "type": "integer"
+      "type": "integer",
+      "default": 0
     },
     "cleaner": {
       "via": "service",

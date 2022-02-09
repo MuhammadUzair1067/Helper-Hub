@@ -17,6 +17,14 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/bookings/paymentwebhook",
+      "handler": "booking.paymentwebhook",
+      "config": {
+        "policies": []
+      }
+    },
+    {
       "method": "GET",
       "path": "/bookings/:id",
       "handler": "booking.findOne",
@@ -25,8 +33,8 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/bookings/payStripe/:id",
+      "method": "POST",
+      "path": "/bookings/payStripe",
       "handler": "booking.payStripe",
       "config": {
         "policies": []

@@ -9,28 +9,25 @@ const  axios = require('axios');
 module.exports = {
   async create(ctx) {
     const {available,startTime,endTime,days} = ctx.request.body;
+    const {id} = ctx.state.user;
 
     let entity;
-    if (ctx.is('multipart')) {
-      const { data, files } = parseMultipartData(ctx);
-      entity = await strapi.services.restaurant.create(data, { files });
-    } else {
       try {
-        let user = await axios.get(`${process.env.PUBLIC_URL}users`,
-        {headers:{"Authorization":ctx.headers.authorization}});
-        if(user){
+        // let user = await axios.get(`${process.env.PUBLIC_URL}users`,
+        // {headers:{"Authorization":ctx.headers.authorization}});
+        const cleaner = await strapi.services.cleaner.findOne({user:id});
+        if(cleaner){
           entity = await strapi.services.schedule.create({
             available,
             startTime,
             endTime,
             days,
-            cleaner:user.data[0].cleaner.id
+            cleaner:cleaner.id
           });
           return sanitizeEntity(entity, { model: strapi.models.schedule });
         }
       } catch (error) {
         return error;
       }
-    }
   }
 }

@@ -21,12 +21,12 @@
     "endTime": {
       "type": "time"
     },
-    "days": {
-      "type": "json"
-    },
     "cleaner": {
       "via": "schedule",
       "model": "cleaner"
+    },
+    "days": {
+      "type": "json"
     }
   }
 }

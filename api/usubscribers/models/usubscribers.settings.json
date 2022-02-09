@@ -1,0 +1,19 @@
+{
+  "kind": "collectionType",
+  "collectionName": "usubscribers",
+  "info": {
+    "name": "usubscriber",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "email": {
+      "type": "string"
+    }
+  }
+}

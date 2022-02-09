@@ -17,6 +17,14 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/notifications/invite",
+      "handler": "notification.invite",
+      "config": {
+        "policies": []
+      }
+    },
+    {
       "method": "GET",
       "path": "/notifications/:id",
       "handler": "notification.findOne",
