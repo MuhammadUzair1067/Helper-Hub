@@ -11,8 +11,9 @@ module.exports = {
   async connectedAccount(ctx){
     const {email,id} = ctx.state.user;
     let accountID,accountLink;
-
+    
     try {
+      const cleaner = await strapi.services.cleaner.findOne({user:id})
       let wallet = await strapi.services.wallet.findOne({cleaner:id})
 
       if(wallet?.onboarding){
@@ -48,7 +49,7 @@ module.exports = {
 
         if(!wallet){
         wallet = await strapi.services.wallet.create(
-          {connectAccountID:accountID,cleaner:id})
+          {connectAccountID:accountID,cleaner:cleaner.id})
       }
       const a =  sanitizeEntity(wallet, { model: strapi.models.wallet });
       return {...a,accountLink:accountLink.url}
@@ -60,9 +61,10 @@ module.exports = {
   async update(ctx){
     const {id} = ctx.state.user; 
     try {
+      const cleaner = await strapi.services.cleaner.findOne({user:id})
 
       let entity = await strapi.services.wallet.update(
-        {cleaner:id},{onboarding:true});
+        {cleaner:cleaner.id},{onboarding:true});
 
       return sanitizeEntity(entity, { model: strapi.models.wallet });;
     } catch (error) {
@@ -71,10 +73,11 @@ module.exports = {
   },
   async balances(ctx){
     const {id} = ctx.state.user;
-
-    const wallet = await strapi.services.wallet.findOne({cleaner:id,onboarding:true})
-
+    
     try {
+      const cleaner = await strapi.services.cleaner.findOne({user:id})
+  
+      const wallet = await strapi.services.wallet.findOne({cleaner:cleaner.id,onboarding:true})
       const balance = await stripe.balance.retrieve({
         stripe_account: wallet.connectAccountID,
       });
@@ -87,7 +90,8 @@ module.exports = {
   async loginToStripe(ctx){
     const {id} = ctx.state.user;
     try {
-      const wallet = await strapi.services.wallet.findOne({cleaner:id})
+      const cleaner = await strapi.services.cleaner.findOne({user:id})
+      const wallet = await strapi.services.wallet.findOne({cleaner:cleaner.id})
 
       const link = await stripe.accounts.createLoginLink(
         wallet.connectAccountID
