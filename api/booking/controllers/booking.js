@@ -95,7 +95,6 @@ module.exports = {
   },
   async paymentwebhook(ctx){
     const sig = ctx.headers['stripe-signature'];
-    const body = ctx.request.body;
     const unparsedBody = ctx.request.body[unparsed];
   
     let event = null;
@@ -104,15 +103,50 @@ module.exports = {
       event = stripe.webhooks.constructEvent(unparsedBody, sig, endpointSecret);
 
       let intent = null;
+      console.log(event['type']);
+      let subscription;
       switch (event['type']) {
+        case 'invoice.paid':
+          intent = event.data.object;
+          subscription = await strapi.services.stripe.update(
+            {customerID:intent.customer},{subscriptionStatus:'subscribed',subscriptionID:intent.subscription});
+
+          // const cleaner = await strapi.services.cleaner.findOne({id:subscription.cleaner.id},{subscriptionStatus:'subscribed'});
+          await strapi.query('user', 'users-permissions').update({ id:subscription.cleaner.user }, { role: process.env.PREMIUM_ID })
+
+          await strapi.plugins['email'].services.email.send({
+            to: `${intent.customer_email}`, //todo
+            from: process.env.SENDGRID_EMAIL,
+            replyTo:  process.env.SENDGRID_EMAIL,
+            subject:  'Wand Subscription',
+            text: `${intent.customer_email} is subscribed and payment in deducted from your account, if want to unsubcribe you can contact the us`,
+          })
+          break;
+        case 'invoice.payment_failed':
+          intent = event.data.object;
+          subscription = await strapi.services.stripe.update({customerID:intent.customer},{subscriptionStatus:'unpaid'});
+
+          const cleaner = await strapi.services.cleaner.findOne({id:subscription.cleaner.id});
+          await strapi.query('user', 'users-permissions').update({ id:cleaner.user.id }, { role: process.env.AUTHENTICATED_ID })
+
+          await strapi.plugins['email'].services.email.send({
+            to: `${cleaner?.user.email}`, 
+            from: process.env.SENDGRID_EMAIL,
+            replyTo:  process.env.SENDGRID_EMAIL,
+            subject:  'Wand Subscription',
+            text: `${cleaner?.user?.email} payment for subscription is failed so you are demoted to normal cleaner, if you dont want to continue pls cancel the subscription by contacting us via EMAIL or website`,
+          })
+          break;
         case 'payment_intent.succeeded':
           intent = event.data.object;
-          // console.log("Succeeded:", intent.id);
           let idx;
           const payment = await strapi.services.payment.findOne({intentID:intent.id});
           if(!payment){
             const regex = /bookingID[0-9]*/g;
             const found = intent.description.match(regex);
+            if(!found){
+              return;
+            }
             idx = found[0].substring(9);
             await strapi.services.payment.create({
               booking:idx,
@@ -123,11 +157,6 @@ module.exports = {
             idx = payment.booking;
           }
           await strapi.services.booking.update({id:idx},{paid:true,paidBy:'stripe'});
-          break;
-        case 'payment_intent.payment_failed':
-          intent = event.data.object;
-          const message = intent.last_payment_error && intent.last_payment_error.message;
-          console.log('Failed:', intent.id, message);
           break;
       }
     

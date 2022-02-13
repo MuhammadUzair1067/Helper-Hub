@@ -25,6 +25,14 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/cleaners/createEmployee",
+      "handler": "cleaner.createEmployee",
+      "config": {
+        "policies": []
+      }
+    },
+    {
       "method": "GET",
       "path": "/cleaners/:id",
       "handler": "cleaner.findOne",
@@ -40,22 +48,7 @@
         "policies": []
       }
     },
-    {
-      "method": "GET",
-      "path": "/cleaners/trialsubscribe",
-      "handler": "cleaner.trialsubscribe",
-      "config": {
-        "policies": []
-      }
-    },
-    {
-      "method": "GET",
-      "path": "/cleaners/cancelsubscription",
-      "handler": "cleaner.cancelsubscription",
-      "config": {
-        "policies": []
-      }
-    },
+
     {
       "method": "PUT",
       "path": "/cleaners/:id",

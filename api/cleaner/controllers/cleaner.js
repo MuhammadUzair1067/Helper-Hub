@@ -1,7 +1,6 @@
 'use strict';
 const { parseMultipartData, sanitizeEntity } = require('strapi-utils');
 const  axios = require('axios');
-const stripe = require("stripe")("sk_test_TJ0xZiLwb8VtmVn9beNRsDFh00rLP48kV5");
 
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
@@ -78,68 +77,41 @@ module.exports = {
       return error;
     }
   },
-  async subscribe(ctx){
-    console.log('he')
-    const  {email} = ctx.state.user;
-    const { payment_method} = ctx.request.body;
+  async createEmployee(ctx){
     try {
-      const customer = await stripe.customers.create({
-        payment_method: payment_method,
-        email: email,
-        invoice_settings: {
-          default_payment_method: payment_method,
-        },
+      const {email,password,firstName,lastName,phoneNumber} = ctx.request.body;
+
+      let user = await axios.post(`${process.env.PUBLIC_URL}auth/local/register`,{
+        email,
+        username:email,
+        password
       });
+      if(user.data){
+        let cleaner = await strapi.services.cleaner.create({
+          firstName,
+          lastName,
+          phoneNumber,
+          user:user.data.user.id
+        });
 
-      const subscription = await stripe.subscriptions.create({
-        customer: customer.id,
-        items: [{ plan: 'price_1KOejOEUu08wLGaUJWpPchjz' }],
-        expand: ['latest_invoice.payment_intent'],
-      });
+        let business = await strapi.services.business.update({
+          admin:ctx.state.user.id},
+          {cleaners:cleaner.id});
 
-      const status = subscription['latest_invoice']['payment_intent']['status'] 
-      const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
+        await strapi.query('user', 'users-permissions').update({ id:user.data.user.id }, { role: process.env.EMPLOYEE_ID })
 
-      return {'client_secret': client_secret, 'status': status};
-    } catch (error) {
-      return error
-    }
-  },
-  async trialsubscribe(ctx){
-    console.log('he')
-    const  {email} = ctx.state.user;
-    const {payment_method} = ctx.request.body;
-    try {
-      const customer = await stripe.customers.create({
-        payment_method: payment_method,
-        email: email,
-        invoice_settings: {
-          default_payment_method: payment_method,
-        },
-      });
-
-      const subscription = await stripe.subscriptions.create({
-        customer: customer.id,
-        items: [{ plan: 'price_1KOejOEUu08wLGaUJWpPchjz' }],
-        expand: ['latest_invoice.payment_intent'],
-      });
-
-      const status = subscription['latest_invoice']['payment_intent']['status'] 
-      const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
-
-      return {'client_secret': client_secret, 'status': status};
-    } catch (error) {
-      return error
-    }
-  },
-  async cancelsubscription(ctx){
-    try {
-      const deleted = await stripe.subscriptions.del(
-        'sub_1KOge74XsdaddaBSVfN73R85'
-      );
+        await strapi.plugins['email'].services.email.send({
+          to: `${cleaner?.user.email}`, 
+          from: process.env.SENDGRID_EMAIL,
+          replyTo:  process.env.SENDGRID_EMAIL,
+          subject:  'Wand Profile Creation',
+          text: `${ctx.state.user?.email} created your profile. Login to ${process.env.DOMAIN_URL} .your Username:${email} Password:${password}`,
+        })
+        
+        return sanitizeEntity(cleaner, { model: strapi.models.cleaner });;
+        }
     } catch (error) {
       
     }
-  },
-
+  }
 };

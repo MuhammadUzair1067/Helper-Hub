@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "stripes",
   "info": {
-    "name": "Stripe"
+    "name": "Stripe",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -24,11 +25,20 @@
         "trial",
         "non",
         "subscribed",
-        "canceled"
+        "canceled",
+        "trialtaken",
+        "unpaid"
       ]
     },
     "subscriptionID": {
       "type": "string"
+    },
+    "trialTaken": {
+      "type": "boolean",
+      "default": false
+    },
+    "trialEndDate": {
+      "type": "date"
     }
   }
 }

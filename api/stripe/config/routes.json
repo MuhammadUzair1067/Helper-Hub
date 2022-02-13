@@ -10,6 +10,30 @@
     },
     {
       "method": "GET",
+      "path": "/stripes/trialsubscribe",
+      "handler": "stripe.trialsubscribe",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/stripes/subscribe",
+      "handler": "stripe.subscribe",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/stripes/cancelsubscription",
+      "handler": "stripe.cancelsubscription",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
       "path": "/stripes/count",
       "handler": "stripe.count",
       "config": {
