@@ -65,16 +65,16 @@ module.exports = {
     const {id,bookingID} = ctx.request.body;
     const user = ctx.state.user; 
     try {
-      const {amount,cleaner} = await strapi.services.booking.findOne({id:bookingID});
-      const wallet  = await strapi.services.wallet.findOne({cleaner:cleaner.id})
+      const booking = await strapi.services.booking.findOne({id:bookingID});
+      const wallet  = await strapi.services.wallet.findOne({cleaner:booking.cleaner.id})
 
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: amount * 100,
+        amount: booking.amount * 100,
         currency: "USD",
         description: `bookingID${bookingID} Booking payment for bookingID${bookingID} with ${user.email} userID:${user.id}`,
         payment_method: id,
         confirm: true,
-        application_fee_amount: amount * 20,
+        application_fee_amount: booking.amount * 20,
 				transfer_data: {
 					destination:  wallet.connectAccountID,
 				},
@@ -98,10 +98,17 @@ module.exports = {
     const unparsedBody = ctx.request.body[unparsed];
   
     let event = null;
+    let endpointSecret;
+
   
     try {
+      if(process.env.NODE_ENV==='production'){
+        endpointSecret = process.env.STRIPE_WEBHOOK_PROD
+      }else{
+        endpointSecret = process.env.STRIPE_WEBHOOK_LOCAL
+      }
       event = stripe.webhooks.constructEvent(unparsedBody, sig, endpointSecret);
-
+      
       let intent = null;
       console.log(event['type']);
       let subscription;
