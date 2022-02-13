@@ -161,7 +161,7 @@ module.exports = {
               status:'succeeded'
             })
           }else{
-            idx = payment.booking;
+            idx = payment.booking.id;
           }
           await strapi.services.booking.update({id:idx},{paid:true,paidBy:'stripe'});
           break;

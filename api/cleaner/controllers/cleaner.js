@@ -37,46 +37,46 @@ module.exports = {
       return error;
     }
   },
-  async update(ctx){
-    try {
-      const {email,password,firstName,lastName,zipcode,phoneNumber,userId,cleanerId,businessId} = ctx.request.body;
+  // async update(ctx){
+  //   try {
+  //     const {email,password,firstName,lastName,zipcode,phoneNumber,userId,cleanerId,businessId} = ctx.request.body;
 
-      let user = await axios.post(`${process.env.PUBLIC_URL}auth/local/register`,{
-        email,
-        username:email,
-        password
-      });
-      if(user.data){
-        let cleaner = await strapi.services.cleaner.create({
-          firstName,
-          lastName,
-          phoneNumber,
-          user:user.data.user.id
-        });
+  //     let user = await axios.post(`${process.env.PUBLIC_URL}auth/local/register`,{
+  //       email,
+  //       username:email,
+  //       password
+  //     });
+  //     if(user.data){
+  //       let cleaner = await strapi.services.cleaner.create({
+  //         firstName,
+  //         lastName,
+  //         phoneNumber,
+  //         user:user.data.user.id
+  //       });
 
-        let business = await strapi.services.business.create({
-          admin:cleaner.id,
-          zipcode
-        });
+  //       let business = await strapi.services.business.create({
+  //         admin:cleaner.id,
+  //         zipcode
+  //       });
   
-        return {...cleaner,user,business};
-        }
-    } catch (error) {
-      return error;
-    }
-  },
-  async find(ctx){
-    const {email} = ctx.state.user;
-    try {
-      let user = await axios.get(`${process.env.PUBLIC_URL}users`,
-      {email},
-      {headers: ctx.headers});
+  //       return {...cleaner,user,business};
+  //       }
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // },
+  // async find(ctx){
+  //   const {email} = ctx.state.user;
+  //   try {
+  //     let user = await axios.get(`${process.env.PUBLIC_URL}users`,
+  //     {email},
+  //     {headers: ctx.headers});
 
-      return user.data;
-    } catch (error) {
-      return error;
-    }
-  },
+  //     return user.data;
+  //   } catch (error) {
+  //     return error;
+  //   }
+  // },
   async createEmployee(ctx){
     try {
       const {email,password,firstName,lastName,phoneNumber} = ctx.request.body;

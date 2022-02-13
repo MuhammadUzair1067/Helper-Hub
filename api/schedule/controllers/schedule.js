@@ -13,8 +13,7 @@ module.exports = {
 
     let entity;
       try {
-        // let user = await axios.get(`${process.env.PUBLIC_URL}users`,
-        // {headers:{"Authorization":ctx.headers.authorization}});
+
         const cleaner = await strapi.services.cleaner.findOne({user:id});
         if(cleaner){
           entity = await strapi.services.schedule.create({

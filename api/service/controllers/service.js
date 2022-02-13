@@ -12,8 +12,6 @@ module.exports = {
     const {id} = ctx.state.user;
     const {bathroomDuration, kitchenDuration,bedroomDuration,livingroomDuration,ratePerHour} = ctx.request.body;
     try {
-      // let user = await axios.get(`${process.env.PUBLIC_URL}users`,
-      // {headers:{"Authorization":ctx.headers.authorization}});
 
       const cleaner = await strapi.services.cleaner.findOne({user:id});
       if(cleaner){
