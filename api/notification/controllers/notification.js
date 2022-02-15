@@ -22,7 +22,7 @@ module.exports = {
         to: `${sendTo}`,
         from: process.env.SENDGRID_EMAIL,
         replyTo:  process.env.SENDGRID_EMAIL,
-        subject:  'valante',
+        subject:  'Wand Invite',
         text: `${email} ${body} ${URL}`,
       })
 

@@ -94,8 +94,10 @@ module.exports = {
           user:user.data.user.id
         });
 
-        let business = await strapi.services.business.update({
-          admin:ctx.state.user.id},
+        let adminCleaner = await strapi.services.cleaner.findOne({user:ctx.state.user.id});
+
+        await strapi.services.business.update({
+          admin:adminCleaner.id},
           {cleaners:cleaner.id});
 
         await strapi.query('user', 'users-permissions').update({ id:user.data.user.id }, { role: process.env.EMPLOYEE_ID })
@@ -111,7 +113,8 @@ module.exports = {
         return sanitizeEntity(cleaner, { model: strapi.models.cleaner });;
         }
     } catch (error) {
-      
+      console.log(error)
+      return error;
     }
   }
 };
