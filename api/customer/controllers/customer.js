@@ -6,27 +6,69 @@ const  axios = require('axios');
  * to customize this controller
  */
 
+const formatError = error => [
+  { messages: [{ id: error.id, message: error.message, field: error.field }] },
+];
 module.exports = {
   async create(ctx){
+    const cleanerId=ctx.state.user.cleaner;
+    let user;
     try {
-      const {email,password,phoneNumber} = ctx.request.body;
-
-      let user = await axios.post(`${process.env.PUBLIC_URL}auth/local/register`,{
+      const cleaner = await strapi.services.cleaner.findOne({id:cleanerId})
+      const {
+        firstName,
+        lastName,
+        phoneNumber,
         email,
-        username:email,
-        password
-      });
+        companyName,
+        preferredMethod,
+        password,
+        marketSource,
+        billingAddress,
+        notes,
+        address1,
+        address2,
+        city,
+        region,
+        zipCode,
+      } = ctx.request.body;
+      try {
+        user = await axios.post(`${process.env.PUBLIC_URL}auth/local/register`,{
+          email,
+          username:email,
+          password
+        });
+      } catch (error) {
+        return ctx.badRequest(
+          formatError({message:'email could be already taken'})
+        );
+      }
 
-      const a = await strapi.query('user', 'users-permissions').update({ id: user.data.user.id }, { role: process.env.CUSTOMER_ID })
+      await strapi.query('user', 'users-permissions').update({ id: user.data.user.id }, { role: process.env.CUSTOMER_ID })
 
       let entity = await strapi.services.customer.create({
+        firstName,
+        lastName,
         phoneNumber,
-        user:user.data.user.id
+        companyName,
+        preferredMethod,
+        marketSource,
+        billingAddress,
+        notes,
+        address1,
+        address2,
+        city,
+        region,
+        zipCode,
+        user:user.data.user.id,
+        business:cleaner.business?.id
       })
+      return sanitizeEntity(entity, { model: strapi.models.customer });;
 
-      return {  ...entity, user: {...user.data, role: a.role} }
     } catch (error) {
-      return error;
+      return ctx.badRequest(
+        error
+      );
     }
   }
 };

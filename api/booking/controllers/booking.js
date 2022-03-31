@@ -9,7 +9,7 @@ const unparsed = require("koa-body/unparsed.js");
 const endpointSecret = 'whsec_25ecd43d2f89e0d14ee119e09cf49634968f3ead33fe6d4dc735ef6a111eb904'
 module.exports = {
   async create(ctx){
-    let entity,found,amount;
+    let entity,found,amount,duration;
     const {
       cleaner,
       customer,
@@ -36,11 +36,12 @@ module.exports = {
           return;
         }
       const services = await strapi.services.service.findOne({cleaner:cleaner})
-
-      amount = (bedroomCount * services.bedroomDuration + 
+      duration = bedroomCount * services.bedroomDuration + 
         bathroomCount * services.bathroomDuration + 
         1 * services.kitchenDuration + 
-        1 * services.livingroomDuration ) * services.ratePerHour;
+        1 * services.livingroomDuration 
+
+      amount = duration * services.ratePerHour;
 
 
       entity = await strapi.services.booking.create({
@@ -53,12 +54,45 @@ module.exports = {
         instructions,
         pets,
         address,
-        amount
+        duration,
+        amount,
       })
       return sanitizeEntity(entity, { model: strapi.models.booking });
     } catch (error) {
       console.log(error)
       return error;
+    }
+  },
+  async finder(ctx){
+    const cleanerId = ctx.request.body.cleaner;
+    const {allStatus,allDurations,date}=ctx.request.body;
+    var obj={};
+    obj.push({
+      cleaner:cleanerId
+    })
+    try {
+      if(allStatus.length>1){
+        obj.push({
+          status:allStatus
+        })
+      }
+      if(allDurations.length>1){
+        var numb = allDurations.match(/\d/g);
+        numb = numb.join("");
+        obj.push({
+          duration:numb
+        })
+      }
+      if(date){
+        var d = moment(date).format("YYYY-MM-DD");
+        obj.push({
+          date:d
+        })
+      }
+      var entity= await strapi.services.booking.find(obj)
+      return entity;
+    } catch (error) {
+      return ctx.badRequest(error)
     }
   },
   async payStripe(ctx){
@@ -175,5 +209,41 @@ module.exports = {
       console.log(err)
       return err;
     }
-  }
+  },
+  async revenueYearly(ctx) {
+    const cleanerId =  ctx.state.user.cleaner;
+    const {startDate,endDate}=ctx.request.body;
+    var startMonth,starter,breaker;
+
+    let entities;
+    let length=[];
+    let months=[];
+    let revenues=[];
+    if(!startDate){
+      startMonth=moment().subtract(11,'months').format("YYYY-MM-01");
+      starter=startMonth;
+    }else{
+      starter=endDate;
+      breaker=moment(startDate).add(1,'months').format("YYYY-MM-01");
+    }
+
+    for(var i=0;i<12;i++){
+      const startMonthLoop=moment(starter).add(i,'months').format("YYYY-MM-01");
+      const endMonth=moment(startMonthLoop).endOf('month').format("YYYY-MM-DD");
+      if(startDate && startMonthLoop===breaker){
+        break;
+      }
+      // const month=moment(startMonthLoop).format('MMMM');
+
+        entities = await strapi.query('booking').find({ created_at_gte: startMonthLoop,created_at_lte: endMonth,cleaner:cleanerId})
+      let revenue=0;
+      entities.map((val,i)=>{
+        revenue=revenue+ val.amount;
+      })
+      revenues.push(revenue);
+      months.push(endMonth);
+      length.push(entities.length)
+    }
+    return {length,months,revenues};
+  },
 };

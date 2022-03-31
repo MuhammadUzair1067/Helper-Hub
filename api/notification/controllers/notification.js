@@ -23,7 +23,7 @@ module.exports = {
         from: process.env.SENDGRID_EMAIL,
         replyTo:  process.env.SENDGRID_EMAIL,
         subject:  'Wand Invite',
-        text: `${email} ${body} ${URL}`,
+        text: `${email} has invited you. ${body} ${URL}`,
       })
 
       entity = await strapi.services.notification.create({

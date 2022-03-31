@@ -17,6 +17,22 @@
       }
     },
     {
+      "method": "GET",
+      "path": "/cleaners/fetchcleaner",
+      "handler": "cleaner.fetchcleaner",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/cleaners/stats",
+      "handler": "cleaner.stats",
+      "config": {
+        "policies": []
+      }
+    },
+    {
       "method": "POST",
       "path": "/cleaners",
       "handler": "cleaner.create",

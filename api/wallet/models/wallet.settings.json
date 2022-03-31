@@ -20,6 +20,7 @@
       "default": false
     },
     "cleaner": {
+      "via": "wallet",
       "model": "cleaner"
     }
   }

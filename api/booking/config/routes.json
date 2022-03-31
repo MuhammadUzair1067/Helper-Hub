@@ -18,6 +18,22 @@
     },
     {
       "method": "POST",
+      "path": "/bookings/revenueYearly",
+      "handler": "booking.revenueYearly",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/bookings/finder",
+      "handler": "booking.finder",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
       "path": "/bookings/paymentwebhook",
       "handler": "booking.paymentwebhook",
       "config": {

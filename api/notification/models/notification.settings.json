@@ -16,8 +16,8 @@
       "type": "string"
     },
     "business": {
-      "model": "business",
-      "via": "notifications"
+      "via": "notifications",
+      "model": "business"
     },
     "customer": {
       "via": "notifications",

@@ -9,10 +9,16 @@ const  axios = require('axios');
 
 module.exports = {
   async create(ctx){
+    let url;
     try {
       const {email,password,firstName,lastName,zipcode,phoneNumber} = ctx.request.body;
+      if(process.env.NODE_ENV==='production'){
+        url=process.env.PUBLIC_URL;
+      }else{
+        url=process.env.PUBLIC_URL_LOCAL;
+      }
 
-      let user = await axios.post(`${process.env.PUBLIC_URL}auth/local/register`,{
+      let user = await axios.post(`${url}auth/local/register`,{
         email,
         username:email,
         password
@@ -35,6 +41,49 @@ module.exports = {
         }
     } catch (error) {
       return error;
+    }
+  },
+
+  async fetchcleaner(ctx){
+    try {
+      const customerId= ctx.state.user.customer;
+      const business = await strapi.services.business.findOne({customers:customerId});
+      const cleaner = await strapi.services.cleaner.findOne(
+        {id:business.admin.id});
+
+      return {
+        schedule:cleaner.schedule,
+        service:cleaner.service,
+        wallet:cleaner.wallet?.onboarding,
+        business:cleaner.business,
+        firstName:cleaner.firstName,
+        lastName:cleaner.lastName}
+    } catch (error) {
+      return ctx.badRequest(
+        error
+      );
+    }
+  },
+
+  async stats(ctx){
+    try {
+      const id = ctx.state.user.cleaner;
+      var unCompletedCount=0,totalRevenue=0,forcastRevenue=0;
+      const bookings = await strapi.services.booking.find({cleaner:id});
+      for(var a=0; a<bookings.length; a++){
+        if(bookings[a].status!=='COMPLETED'){
+          unCompletedCount++;
+          forcastRevenue+=bookings[a].amount;
+        }
+        totalRevenue+=bookings[a].amount;
+      }
+      return {
+        totalBookings:bookings.length,
+        totalRevenue,
+        forcastRevenue,
+        unCompletedCount}
+    } catch (error) {
+      ctx.badRequest(error)
     }
   },
   // async update(ctx){

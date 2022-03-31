@@ -19,7 +19,7 @@
       "type": "string"
     },
     "pic": {
-      "collection": "file",
+      "model": "file",
       "via": "related",
       "allowedTypes": [
         "images",
@@ -57,6 +57,10 @@
     },
     "phoneNumber": {
       "type": "string"
+    },
+    "wallet": {
+      "via": "cleaner",
+      "model": "wallet"
     }
   }
 }

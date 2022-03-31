@@ -23,6 +23,46 @@
     },
     "phoneNumber": {
       "type": "string"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "companyName": {
+      "type": "string"
+    },
+    "preferredMethod": {
+      "type": "string"
+    },
+    "marketingSource": {
+      "type": "string"
+    },
+    "billingAddress": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "address1": {
+      "type": "string"
+    },
+    "address2": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string"
+    },
+    "zipCode": {
+      "type": "biginteger"
+    },
+    "business": {
+      "via": "customers",
+      "model": "business"
     }
   }
 }

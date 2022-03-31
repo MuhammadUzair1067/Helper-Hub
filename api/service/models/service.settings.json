@@ -13,10 +13,12 @@
   "pluginOptions": {},
   "attributes": {
     "bathroomDuration": {
-      "type": "integer"
+      "type": "integer",
+      "default": 1
     },
     "kitchenDuration": {
-      "type": "integer"
+      "type": "integer",
+      "default": 1
     },
     "bedroomDuration": {
       "type": "integer"

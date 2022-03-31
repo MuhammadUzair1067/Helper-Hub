@@ -64,8 +64,15 @@
     "paidBy": {
       "type": "string"
     },
-    "paid": {
-      "type": "boolean"
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "COMPLETED",
+        "ACTIVE",
+        "PAID",
+        "UN_PAID"
+      ],
+      "default": "ACTIVE"
     }
   }
 }

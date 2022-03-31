@@ -13,7 +13,7 @@
   "pluginOptions": {},
   "attributes": {
     "logo": {
-      "collection": "file",
+      "model": "file",
       "via": "related",
       "allowedTypes": [
         "images",
@@ -37,6 +37,43 @@
     "notifications": {
       "via": "business",
       "collection": "notification"
+    },
+    "cleaningService": {
+      "type": "string"
+    },
+    "otherEmail": {
+      "type": "email"
+    },
+    "companyPhone": {
+      "type": "string"
+    },
+    "companyWebsite": {
+      "type": "string"
+    },
+    "facebookPage": {
+      "type": "string"
+    },
+    "billingAddress": {
+      "type": "string"
+    },
+    "city": {
+      "type": "string"
+    },
+    "region": {
+      "type": "string"
+    },
+    "address1": {
+      "type": "string"
+    },
+    "address2": {
+      "type": "string"
+    },
+    "zipCode": {
+      "type": "biginteger"
+    },
+    "customers": {
+      "collection": "customer",
+      "via": "business"
     }
   }
 }
