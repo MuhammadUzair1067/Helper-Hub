@@ -16,7 +16,8 @@
       "type": "integer"
     },
     "customer": {
-      "model": "customer"
+      "model": "customer",
+      "via": "bookings"
     },
     "cleaner": {
       "via": "bookings",
@@ -73,6 +74,10 @@
         "UN_PAID"
       ],
       "default": "ACTIVE"
+    },
+    "kitchenCount": {
+      "default": 1,
+      "type": "integer"
     }
   }
 }

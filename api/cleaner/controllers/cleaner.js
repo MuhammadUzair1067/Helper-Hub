@@ -36,11 +36,10 @@ module.exports = {
           admin:cleaner.id,
           zipcode
         });
-  
-        return {...cleaner,user:user.data,business};
+        return {cleaner,...user.data,business};
         }
     } catch (error) {
-      return error;
+      return ctx.badRequest(error);
     }
   },
 
@@ -163,7 +162,7 @@ module.exports = {
         }
     } catch (error) {
       console.log(error)
-      return error;
+      return ctx.badRequest(error);
     }
   }
 };
