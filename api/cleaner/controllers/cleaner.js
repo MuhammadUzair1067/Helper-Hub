@@ -32,6 +32,23 @@ module.exports = {
           user:user.data.user.id
         });
 
+        await strapi.services.service.create({
+          bathroomDuration:30,
+          kitchenDuration:30,
+          bedroomDuration:30,
+          livingroomDuration:120,
+          ratePerHour:30,
+          cleaner: cleaner.id
+        })
+
+        await strapi.services.schedule.create({
+          available:true,
+          startTime:"00:30:00.000",
+          endTime:"02:30:00.000",
+          days:["mon","tues","fri"],
+          cleaner:cleaner.id
+        });
+
         let business = await strapi.services.business.create({
           admin:cleaner.id,
           zipcode

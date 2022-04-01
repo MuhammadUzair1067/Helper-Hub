@@ -7,6 +7,10 @@ const unparsed = require("koa-body/unparsed.js");
  * to customize this controller
  */
 const endpointSecret = 'whsec_25ecd43d2f89e0d14ee119e09cf49634968f3ead33fe6d4dc735ef6a111eb904'
+
+const formatError = error => [
+  { messages: [{ id: error.id, message: error.message, field: error.field }] },
+];
 module.exports = {
   async create(ctx){
     let entity,found,amount,duration;
@@ -41,12 +45,20 @@ module.exports = {
           startTime_lte:time,
           endTime_gte:time
         })
+
+        if(!schedule){
+          return ctx.badRequest(
+            formatError({message:'cleaner not available at the booking date/time'})
+          )
+        }
         
         found = schedule?.days.filter(val=>{
           return val == day; 
         })
         if(found?.length<1){
-          return;
+          return ctx.badRequest(
+            formatError({message:'cleaner not available at the booking date/time'})
+          )
         }
         var price= types.filter((val)=>{
           return val.label===type
