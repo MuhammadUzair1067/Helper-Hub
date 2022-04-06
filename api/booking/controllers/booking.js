@@ -46,20 +46,20 @@ module.exports = {
           endTime_gte:time
         })
 
-        if(!schedule){
-          return ctx.badRequest(
-            formatError({message:'cleaner not available at the booking date/time'})
-          )
-        }
+        // if(!schedule){
+        //   return ctx.badRequest(
+        //     formatError({message:'cleaner not available at the booking date/time'})
+        //   )
+        // }
         
         found = schedule?.days.filter(val=>{
           return val == day; 
         })
-        if(found?.length<1){
-          return ctx.badRequest(
-            formatError({message:'cleaner not available at the booking date/time'})
-          )
-        }
+        // if(found?.length<1){
+        //   return ctx.badRequest(
+        //     formatError({message:'cleaner not available at the booking date/time'})
+        //   )
+        // }
         var price= types.filter((val)=>{
           return val.label===type
         })
