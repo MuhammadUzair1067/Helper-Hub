@@ -42,8 +42,8 @@ module.exports = {
       const schedule = await strapi.query('schedule').findOne(
         {cleaner:cleaner,
           available:true,
-          startTime_lte:time,
-          endTime_gte:time
+          // startTime_lte:time,
+          // endTime_gte:time
         })
 
         // if(!schedule){

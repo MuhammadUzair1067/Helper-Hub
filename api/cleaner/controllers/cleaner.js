@@ -45,7 +45,7 @@ module.exports = {
           available:true,
           startTime:"00:30:00.000",
           endTime:"02:30:00.000",
-          days:["mon","tues","fri"],
+          days:["Monday","Tuesday","Friday"],
           cleaner:cleaner.id
         });
 
