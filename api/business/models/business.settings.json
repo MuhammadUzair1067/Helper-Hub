@@ -74,6 +74,15 @@
     "customers": {
       "collection": "customer",
       "via": "business"
+    },
+    "country": {
+      "type": "string"
+    },
+    "country1": {
+      "type": "string"
+    },
+    "timezone": {
+      "type": "string"
     }
   }
 }
