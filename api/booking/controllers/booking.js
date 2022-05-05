@@ -257,7 +257,6 @@ module.exports = {
           break;
         }
         // const month=moment(startMonthLoop).format('MMMM');
-  
           entities = await strapi.query('booking').find({ created_at_gte: startMonthLoop,created_at_lte: endMonth,cleaner:cleanerId})
         let revenue=0;
         entities.map((val,i)=>{
