@@ -12,20 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "bathroomDuration": {
-      "type": "integer",
-      "default": 1
-    },
-    "kitchenDuration": {
-      "type": "integer",
-      "default": 1
-    },
-    "bedroomDuration": {
-      "type": "integer"
-    },
-    "livingroomDuration": {
-      "type": "integer"
-    },
     "ratePerHour": {
       "type": "integer",
       "default": 0

@@ -16,20 +16,12 @@
       "type": "integer"
     },
     "customer": {
-      "model": "customer",
-      "via": "bookings"
+      "via": "bookings",
+      "model": "customer"
     },
     "cleaner": {
       "via": "bookings",
       "model": "cleaner"
-    },
-    "bedroomCount": {
-      "type": "integer",
-      "default": 0
-    },
-    "bathroomCount": {
-      "type": "integer",
-      "default": 0
     },
     "pictures": {
       "collection": "file",
@@ -75,9 +67,26 @@
       ],
       "default": "ACTIVE"
     },
-    "kitchenCount": {
-      "default": 1,
-      "type": "integer"
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "CHEF",
+        "DRIVER",
+        "CLEANER",
+        "MAID",
+        "CHILD_CARE",
+        "NURSE",
+        "GARDENER",
+        "ELDERCARE"
+      ]
+    },
+    "rating": {
+      "type": "integer",
+      "default": 0
+    },
+    "hour": {
+      "type": "integer",
+      "default": 1
     }
   }
 }

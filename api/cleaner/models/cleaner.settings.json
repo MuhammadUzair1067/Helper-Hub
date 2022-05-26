@@ -61,6 +61,24 @@
     "wallet": {
       "via": "cleaner",
       "model": "wallet"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "DRIVER",
+        "CHEF",
+        "GARDENER",
+        "MAID",
+        "ELDERCARE",
+        "CHILD_CARE",
+        "CLEANER",
+        "NURSE"
+      ],
+      "default": "DRIVER"
+    },
+    "available": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

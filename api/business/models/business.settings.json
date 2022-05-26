@@ -41,9 +41,6 @@
     "cleaningService": {
       "type": "string"
     },
-    "otherEmail": {
-      "type": "email"
-    },
     "companyPhone": {
       "type": "string"
     },
@@ -68,12 +65,12 @@
     "address2": {
       "type": "string"
     },
-    "zipCode": {
+    "age": {
       "type": "biginteger"
     },
     "customers": {
-      "collection": "customer",
-      "via": "business"
+      "via": "business",
+      "collection": "customer"
     },
     "country": {
       "type": "string"
@@ -83,6 +80,22 @@
     },
     "timezone": {
       "type": "string"
+    },
+    "about": {
+      "type": "string"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "CHEF",
+        "DRIVER",
+        "CLEANER",
+        "MAID",
+        "CHILD_CARE",
+        "NURSE",
+        "GARDENER",
+        "ELDERCARE"
+      ]
     }
   }
 }

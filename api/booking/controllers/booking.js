@@ -1,91 +1,60 @@
 const { parseMultipartData, sanitizeEntity } = require('strapi-utils');
-const stripe = require("stripe")("sk_test_51EgE2aEUu08wLGaUGiUyFwriWfKuh0wu95ROSgQMQx9j6J5sfJPhkqUS6kE28dz5OGWQ6TZclVd1wznAlkeoGP2Y00GsmCoesh");
+const stripe = require("stripe")("sk_test_5");
 const moment = require('moment');
 const unparsed = require("koa-body/unparsed.js");
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
  * to customize this controller
  */
-const endpointSecret = 'whsec_25ecd43d2f89e0d14ee119e09cf49634968f3ead33fe6d4dc735ef6a111eb904'
 
 const formatError = error => [
   { messages: [{ id: error.id, message: error.message, field: error.field }] },
 ];
 module.exports = {
   async create(ctx){
-    let entity,found,amount,duration;
-    const types = [
-      {label:'Vacation Rental Service',
-      value:1.2},
-      {label:'COVID -19 Disinfectant',
-      value:1.5},
-      {label:'Standard cleaning',
-      value:1},
-      {label:'Deep cleaning',
-      value:1.3},
-    ]
+    let entity,found,amount;
+
     const {
       cleaner,
       customer,
-      bedroomCount,
-      bathroomCount,
-      kitchenCount,
       paidBy,
       pets,
       time,
       date,
       type,
       instructions,
+      ratePerHour,
+      duration,
+      hour,
       address} = ctx.request.body;
     try {
       const day = moment(date).format('dddd');
       const schedule = await strapi.query('schedule').findOne(
         {cleaner:cleaner,
           available:true,
-          // startTime_lte:time,
-          // endTime_gte:time
         })
-
-        // if(!schedule){
-        //   return ctx.badRequest(
-        //     formatError({message:'cleaner not available at the booking date/time'})
-        //   )
-        // }
+        if(!schedule){
+          return ctx.badRequest('cleaner not available...');
+        }
         
         found = schedule?.days.filter(val=>{
           return val == day; 
         })
-        // if(found?.length<1){
-        //   return ctx.badRequest(
-        //     formatError({message:'cleaner not available at the booking date/time'})
-        //   )
-        // }
-        var price= types.filter((val)=>{
-          return val.label===type
-        })
 
-      const services = await strapi.services.service.findOne({cleaner:cleaner})
-      duration = bedroomCount * services.bedroomDuration + 
-        bathroomCount * services.bathroomDuration + 
-        kitchenCount * services.kitchenDuration + 
-        1 * services.livingroomDuration 
-
-      amount = (duration/60) * price[0].value * services.ratePerHour;
-
+      amount = duration * hour * +ratePerHour;
 
       entity = await strapi.services.booking.create({
         cleaner,
         customer,
         date,
         time,
-        bedroomCount,
-        bathroomCount,
-        kitchenCount,
-        instructions,
+        type,
         pets,
         address,
         duration,
+        hour,
         amount,
+        instructions,
         paidBy
       })
       return sanitizeEntity(entity, { model: strapi.models.booking });
@@ -96,17 +65,15 @@ module.exports = {
   },
   async finder(ctx){
     const cleanerId = ctx.state.user.cleaner;
-    const {allStatus,allDurations,date}=ctx.request.body;
+    const {allStatus,type,date}=ctx.request.body;
     var obj={};
     obj.cleaner=cleanerId
     try {
       if(allStatus.length>1){
         obj.status=allStatus
       }
-      if(allDurations.length>1){
-        var numb = allDurations.match(/\d/g);
-        numb = numb.join("");
-        obj.duration_lte=numb
+      if(type){
+        obj.type=type
       }
       if(date){
         var d = moment(date).format("YYYY-MM-DD");

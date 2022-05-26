@@ -57,7 +57,7 @@
     "region": {
       "type": "string"
     },
-    "zipCode": {
+    "age": {
       "type": "biginteger"
     },
     "business": {

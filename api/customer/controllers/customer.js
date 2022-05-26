@@ -11,10 +11,8 @@ const formatError = error => [
 ];
 module.exports = {
   async create(ctx){
-    const cleanerId=ctx.state.user.cleaner;
     let user;
     try {
-      const cleaner = await strapi.services.cleaner.findOne({id:cleanerId})
       const {
         firstName,
         lastName,
@@ -30,15 +28,22 @@ module.exports = {
         address2,
         city,
         region,
-        zipCode,
+        age,
       } = ctx.request.body;
       try {
-        user = await axios.post(`${process.env.PUBLIC_URL}auth/local/register`,{
+        let url;
+        if(process.env.NODE_ENV==='development'){
+          url = process.env.PUBLIC_URL_LOCAL
+        }else{
+          url = process.env.PUBLIC_URL
+        }
+        user = await axios.post(`${url}auth/local/register`,{
           email,
           username:email,
           password
         });
       } catch (error) {
+        console.log(error)
         return ctx.badRequest(
           formatError({message:'email could be already taken'})
         );
@@ -59,13 +64,13 @@ module.exports = {
         address2,
         city,
         region,
-        zipCode,
+        age,
         user:user.data.user.id,
-        business:cleaner.business?.id
       })
       return sanitizeEntity(entity, { model: strapi.models.customer });;
 
     } catch (error) {
+      console.log(error)
       return ctx.badRequest(
         error
       );

@@ -2,6 +2,10 @@
 const { parseMultipartData, sanitizeEntity } = require('strapi-utils');
 const  axios = require('axios');
 
+const formatError = error => [
+  { messages: [{ id: error.id, message: error.message, field: error.field }] },
+];
+
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
  * to customize this controller
@@ -11,18 +15,26 @@ module.exports = {
   async create(ctx){
     let url;
     try {
-      const {email,password,firstName,lastName,zipcode,phoneNumber} = ctx.request.body;
+      const {email,password,firstName,lastName,age,phoneNumber} = ctx.request.body;
       if(process.env.NODE_ENV==='production'){
         url=process.env.PUBLIC_URL;
       }else{
         url=process.env.PUBLIC_URL_LOCAL;
       }
 
-      let user = await axios.post(`${url}auth/local/register`,{
-        email,
-        username:email,
-        password
-      });
+      let user;
+      try {
+        user = await axios.post(`${url}auth/local/register`,{
+          email,
+          username:email,
+          password
+        })
+      }catch (error) {
+          console.log(error)
+          return ctx.badRequest(
+            formatError({message:'email could be already taken'})
+          );
+        };
 
       if(user.data){
         let cleaner = await strapi.services.cleaner.create({
@@ -33,10 +45,6 @@ module.exports = {
         });
 
         await strapi.services.service.create({
-          bathroomDuration:30,
-          kitchenDuration:30,
-          bedroomDuration:30,
-          livingroomDuration:120,
           ratePerHour:30,
           cleaner: cleaner.id
         })
@@ -51,11 +59,12 @@ module.exports = {
 
         let business = await strapi.services.business.create({
           admin:cleaner.id,
-          zipcode
+          age
         });
         return {cleaner,...user.data,business};
         }
     } catch (error) {
+      console.log(error)
       return ctx.badRequest(error);
     }
   },

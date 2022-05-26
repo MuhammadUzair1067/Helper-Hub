@@ -1,5 +1,5 @@
 const { parseMultipartData, sanitizeEntity } = require('strapi-utils');
-const stripe = require("stripe")("sk_test_51EgE2aEUu08wLGaUGiUyFwriWfKuh0wu95ROSgQMQx9j6J5sfJPhkqUS6kE28dz5OGWQ6TZclVd1wznAlkeoGP2Y00GsmCoesh");
+const stripe = require("stripe")("sk_test_51E");
 const moment = require('moment');
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
