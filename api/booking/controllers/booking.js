@@ -13,7 +13,6 @@ const formatError = error => [
 module.exports = {
   async create(ctx){
     let entity,found,amount;
-
     const {
       cleaner,
       customer,
@@ -238,6 +237,20 @@ module.exports = {
     } catch (error) {
       return ctx.badRequest(error)
     }
-
   },
+
+  async getReview(ctx){
+    try {
+      const cleanerId = ctx.params.cleanerId
+      const bookings = await strapi.services.booking.find({cleaner:cleanerId,status:'COMPLETED'})
+      var total=0;
+      for(let booking of bookings){
+        total += booking.rating;
+      }
+      total = total / bookings.length;
+      return {review:total,total:bookings.length};
+    } catch (error) {
+      return ctx.badRequest(error)
+    }
+  }
 };

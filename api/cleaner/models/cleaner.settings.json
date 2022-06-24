@@ -74,7 +74,7 @@
         "CLEANER",
         "NURSE"
       ],
-      "default": "DRIVER"
+      "default": "CHEF"
     },
     "available": {
       "type": "boolean",
